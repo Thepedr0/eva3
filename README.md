@@ -59,20 +59,44 @@ Reglas REST aplicadas
 
 [Cliente (Postman / curl)]
           │
-          ▼
+          
       HTTP / JSON
           │
-          ▼
+          
 [API /api/v1 (DRF ViewSets)]
           │
-          ▼
+          
 [Serializers (validación y conversión)]
           │
-          ▼
+          
 [Modelos Django (ORM)]
           │
-          ▼
+          
 [Base de datos SQLite (local)]
 
 
+Descripción de cada capa
 
+Cliente (Postman / curl / SPA):
+Representa al usuario o la aplicación que realiza las solicitudes HTTP hacia la API.
+Envía peticiones (GET, POST, PATCH, DELETE) y recibe las respuestas en formato JSON.
+
+HTTP / JSON:
+Es el medio de comunicación entre el cliente y el servidor.
+HTTP define los verbos (métodos) utilizados y JSON es el formato estándar para transmitir los datos.
+
+API /api/v1 (DRF ViewSets / URLs):
+Es la capa que gestiona las rutas y los métodos disponibles.
+Django REST Framework (DRF) define los endpoints, interpreta los verbos HTTP y coordina la lógica de negocio.
+
+Lógica / Serializers (validación):
+Se encarga de validar, transformar y serializar los datos entre los modelos de Django y el formato JSON.
+Garantiza que la información enviada o recibida cumpla con las reglas del modelo.
+
+Modelo Django (ORM):
+Define la estructura de los datos (por ejemplo, la clase Tarea) y cómo se almacenan en la base de datos.
+Django ORM permite manipular la información mediante objetos Python sin escribir SQL manualmente.
+
+Base de datos SQLite (local):
+Es el sistema de almacenamiento utilizado por la API.
+Guarda de manera persistente los registros creados, modificados o eliminados desde los endpoints.
