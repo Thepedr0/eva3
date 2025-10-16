@@ -4,7 +4,34 @@ Descripción general
 Este proyecto consiste en el desarrollo de una **API REST** utilizando **Django REST Framework (DRF)**.  
 El objetivo es demostrar la comprensión de los principios RESTful y su aplicación práctica en la gestión del recurso **Tarea**, implementando las operaciones CRUD y respetando los códigos y convenciones HTTP.
 
+Configuración de URLs
+	Proyecto – `tareas_api/urls.py`
+	```python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('api/v1/', include('tareas.urls')),  # Versionado en la ruta
+]
 -----------------------------------------------------------------------------------------------------------
+Aplicación – tareas/urls.py
+
+from rest_framework.routers import DefaultRouter
+from .views import TareaViewSet
+
+router = DefaultRouter()
+router.register(r'tareas', TareaViewSet, basename='tarea')
+
+urlpatterns = router.urls
+Resultado:
+
+Colección: /api/v1/tareas/ → (GET, POST)
+
+Detalle: /api/v1/tareas/{id}/ → (GET, PATCH, DELETE)
+
+------------------------------------------------------
+
 
 Recurso principal
 **Tarea** con los siguientes campos:
@@ -15,6 +42,14 @@ Recurso principal
 | titulo | String | Título o nombre de la tarea |
 | hecho | Boolean | Indica si la tarea está completada |
 | created_at | Datetime | Fecha y hora de creación |
+Ejemplo de respuesta JSON:
+
+{
+  "id": 1,
+  "titulo": "Comprar leche para Serafín",
+  "hecho": false,
+  "created_at": "2025-10-14T04:00:35.20297Z"
+}
 
 --------------------------------------------------------------------
 
@@ -57,22 +92,24 @@ Reglas REST aplicadas
 
  Diagrama de arquitectura
 
-[Cliente (Postman / curl)]
+
+          
+  	[Cliente (Postman / curl)]
+          │
+					
+       HTTP / JSON
+          │
+					
+	[API /api/v1 (DRF ViewSets)]
+          │
+					
+	[Serializers (validación y conversión)]
+          │
+       
+	[Modelos Django (ORM)]
           │
           
-      HTTP / JSON
-          │
-          
-[API /api/v1 (DRF ViewSets)]
-          │
-          
-[Serializers (validación y conversión)]
-          │
-          
-[Modelos Django (ORM)]
-          │
-          
-[Base de datos SQLite (local)]
+	[Base de datos SQLite (local)]
 
 
 Descripción de cada capa
@@ -100,3 +137,28 @@ Django ORM permite manipular la información mediante objetos Python sin escribi
 Base de datos SQLite (local):
 Es el sistema de almacenamiento utilizado por la API.
 Guarda de manera persistente los registros creados, modificados o eliminados desde los endpoints.
+
+Ejemplos con curl
+
+Antes de probar los comandos, inicia el servidor:
+
+python manage.py runserver
+
+🔹 Listar tareas
+curl -i http://127.0.0.1:8000/api/v1/tareas/
+
+🔹 Crear tarea
+curl -i -X POST http://127.0.0.1:8000/api/v1/tareas/ \
+  -H "Content-Type: application/json" \
+  -d '{"titulo":"Comprar leche para Serafín"}'
+
+🔹 Detalle de una tarea
+curl -i http://127.0.0.1:8000/api/v1/tareas/1/
+
+🔹 Actualizar parcialmente una tarea
+curl -i -X PATCH http://127.0.0.1:8000/api/v1/tareas/1/ \
+  -H "Content-Type: application/json" \
+  -d '{"hecho": true}'
+
+🔹 Eliminar tarea
+curl -i -X DELETE http://127.0.0.1:8000/api/v1/tareas/1/
