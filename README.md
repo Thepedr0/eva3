@@ -5,8 +5,8 @@ Este proyecto consiste en el desarrollo de una **API REST** utilizando **Django 
 El objetivo es demostrar la comprensión de los principios RESTful y su aplicación práctica en la gestión del recurso **Tarea**, implementando las operaciones CRUD y respetando los códigos y convenciones HTTP.
 
 Configuración de URLs
-	Proyecto – `tareas_api/urls.py`
-	```python
+		Proyecto – `tareas_api/urls.py`
+			```python
 from django.contrib import admin
 from django.urls import path, include
 
